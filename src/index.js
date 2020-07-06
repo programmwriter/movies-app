@@ -1,8 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import App from './components/app';
+// import MovieService from './services/movie-service';
+
+// const movies = new MovieService();
+// const classof = function(object){
+// 	return Object.prototype.toString.call(object).slice(8,-1);
+// }
+// movies.getMovieById(550).then(movies => {
+//   console.log(movies);
+// })
+// movies.getMoviesByKeyword('return').then(movies => {
+//   console.log(classof(movies));
+
+//   movies.map(element => {
+//     console.log(element.id);
+//   });
+
+// })
+
+// movies.getMoviesList().then(movies => {
+//   console.log(movies);
+// })
 
 ReactDOM.render(
   <React.StrictMode>
@@ -11,7 +31,3 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
