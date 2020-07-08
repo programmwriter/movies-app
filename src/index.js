@@ -19,7 +19,9 @@ import App from './components/app';
 //   });
 
 // })
-
+// movies.getMoviesList().then(res => {
+//   console.log(res);
+// })
 // movies.getMoviesList().then(movies => {
 //   console.log(movies);
 // })

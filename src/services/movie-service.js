@@ -46,21 +46,31 @@ export default class MovieService {
 
   // async getMoviesList(){
 
-  //   const moviesList = [];
+  //   // const moviesList = [];
 
-  //   this.getMoviesByKeyword('return').then(movies => {
-  //     const arrOfPromisses =  movies.map(movie =>{
+  //   // this.getMoviesByKeyword('return').then(movies => {
+  //   //   const arrOfPromisses =  movies.map(movie =>{
         
-  //       return this.getMovieById(movie.id);
-  //     })
-  //     console.log(arrOfPromisses);
-  //     Promise.all(arrOfPromisses).then(arr => {
-  //       console.log(`fffffff ${arr}`);
-  //     });
+  //   //     return this.getMovieById(movie.id);
+  //   //   })
+  //   //   console.log(arrOfPromisses);
+  //   //   Promise.all(arrOfPromisses).then(arr => {
+  //   //     console.log(`fffffff ${arr}`);
+  //   //   });
 
-  //   });
+  //   // });
+  //   const result = [];
+  //   const moviesList = await this.getMoviesByKeyword('return');
 
-  //   return moviesList;
+  //   for (let i = 0; i< moviesList.length; i++){
+  //     console.log(moviesList[i].id);
+  //     result.push(await this.getMovieById(moviesList[i].id));
+
+  //   }
+
+  //   const moviesRes = await Promise.all(result);
+
+  //   return moviesRes;
   // }
 
 }

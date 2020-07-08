@@ -19,9 +19,10 @@ export default class MoviesList extends Component {
 
     moviesServ.getMoviesByKeyword('return').then(movies => {
       
-      // const arrOfPromisses = movies.map(movie => {
-      //   return moviesServ.getMovieById(movie.id);
-      // });
+      movies.forEach(movie => {
+        this.setState({[movie.id]:moviesServ.getMovieById(movie.id)})
+        // return moviesServ.getMovieById(movie.id);
+      });
 
       // Promise.all(arrOfPromisses).then(arr => {
       //   this.setState({moviesInfo:arr});
@@ -33,8 +34,13 @@ export default class MoviesList extends Component {
 
 
 
-    moviesServ.getMovieById(550).then(movie => {
+    moviesServ.getMovieById(166869
+      ).then(movie => {
       this.setState({
+        originalTitle:movie.originalTitle,
+        releaseDate:movie.releaseDate,
+        genres:movie.genres,
+        overview:movie.overview,
         path:movie.poster_path
       });
     })
