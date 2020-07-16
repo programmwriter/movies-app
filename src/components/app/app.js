@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "antd/dist/antd.css";
-import "./app.css";
+import "./_app.scss";
 import MovieService from "../../services/movie-service";
 import MoviesList from "../movies-list";
 
@@ -29,7 +29,9 @@ export default class App extends Component {
 
     return (
       <div className="app">
-        <MoviesList moviesList={moviesList} />
+        <div className="movies">
+          <MoviesList moviesList={moviesList} />
+        </div>
       </div>
     );
   }
