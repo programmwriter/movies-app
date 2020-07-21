@@ -11,18 +11,20 @@ export default class MovieService {
     if (!response.ok) {
       throw new Error(`Error in in function getMovies ${response.status}`);
     }
-
     const requestResult = await response.json();
 
     return requestResult;
   }
 
-  async getMoviesByKeyword(keyword) {
+  async getMoviesByKeyword(keyword = "return", page = 1) {
     const res = await this.request(
-      `${this.apiUrl}search/movie?${this.apiKey}&query=${keyword}&page=1&include_adult=false`
+      `${this.apiUrl}search/movie?${this.apiKey}&query=${keyword}&page=${page}&include_adult=true`
     );
-
-    return res.results;
+    const { results: movieByKeyWord, total_results: totalResults } = res;
+    return {
+      movieByKeyWord,
+      totalResults,
+    };
   }
 
   async getMovieById(id) {
@@ -30,25 +32,39 @@ export default class MovieService {
       `${this.apiUrl}movie/${id}?${this.apiKey}`
     );
 
+    const { original_title:originalTitle,
+            release_date:releaseDate ,
+            genres,
+            overview,
+            poster_path:posterPath,
+            vote_average:voteAverage,
+
+    } = response;
+
     const res = {
-      originalTitle: response.original_title,
-      releaseDate: response.release_date,
-      genres: response.genres,
-      overview: response.overview,
-      imgUrl: `${this.apiImgUrl}${response.poster_path}`,
+      originalTitle,
+      releaseDate,
+      genres,
+      overview,
+      voteAverage,
+      imgUrl: `${this.apiImgUrl}${posterPath}`,
     };
 
     return res;
   }
 
-  async getMoviesList(keyword) {
-    const movieByKeyWord = await this.getMoviesByKeyword(keyword);
+  async getMoviesList(keyword, page = 1) {
+    const {totalResults, movieByKeyWord} = await this.getMoviesByKeyword(keyword, page);
 
     const moviesPromisses = movieByKeyWord.map((movie) => {
       return this.getMovieById(movie.id);
     });
     const movies = await Promise.allSettled(moviesPromisses);
 
-    return movies;
+    const listOfResults = movies.map((movie) => {
+      return movie.status === "fulfilled" ? movie.value : false;
+    });
+
+    return {listOfResults, totalResults };
   }
 }

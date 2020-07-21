@@ -1,14 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { format } from 'date-fns'
+import { format } from "date-fns";
 import "./_movie.scss";
 
 import { Card } from "antd";
 
 const { Meta } = Card;
 
-const cropText = (text) => {
-  let str = text.slice(0, 207);
+const cropText = (text, maxLength = 1000) => {
+  if (text.length <= maxLength) {
+    return text;
+  }
+
+  let str = text.slice(0, maxLength);
   const array = str.split(" ");
   array.splice(array.length - 1, 1);
   str = array.join(" ");
@@ -16,7 +20,14 @@ const cropText = (text) => {
 };
 
 const Movie = ({ movie }) => {
-  const { originalTitle, imgUrl, overview, releaseDate, genres } = movie;
+  const {
+    originalTitle = "title",
+    imgUrl = "https://image.tmdb.org/t/p/w200/c9siOypFgzsKL4LQI1d3EkDN6U3.jpg",
+    overview = "overview",
+    releaseDate = "2003-02-25",
+    genres = [{ name: "genre" }, { name: "genre" }],
+    voteAverage,
+  } = movie;
 
   return (
     <Card
@@ -24,14 +35,15 @@ const Movie = ({ movie }) => {
       style={{ width: 454, display: "flex" }}
       cover={<img alt="poster" className="movie__cover" src={imgUrl} />}
     >
-      <Meta title={originalTitle} description={format(new Date(releaseDate), 'MMMM dd, yyyy')} />
+      <Meta
+        title={cropText(originalTitle, 23)}
+        description={format(new Date(releaseDate), "MMMM dd, yyyy")}
+      />
+      <div className="movie__vote">{voteAverage}</div>
       <div className="movie__genres">
         <div className="movie__genre">{genres[0].name}</div>
       </div>
-      <div className="movie__description">
-      {cropText(overview)}
-      </div>
-      {/* <Meta className="movie__description" style={{ color:'black' }} description={cropText(overview)} /> */}
+      <div className="movie__description">{cropText(overview, 230)}</div>
     </Card>
   );
 };
@@ -42,8 +54,20 @@ Movie.propTypes = {
     imgUrl: PropTypes.string,
     overview: PropTypes.string,
     releaseDate: PropTypes.string,
+    voteAverage: PropTypes.number,
     genres: PropTypes.arrayOf(PropTypes.object),
-  }).isRequired,
+  }),
+};
+
+Movie.defaultProps = {
+  movie: {
+    releaseDate: "2003-02-25",
+    originalTitle: "originalTitle",
+    genres: [{ name: "genre" }],
+    overview: "overview",
+    voteAverage: 0,
+    imgUrl: "https://image.tmdb.org/t/p/w200/c9siOypFgzsKL4LQI1d3EkDN6U3.jpg",
+  },
 };
 
 export default Movie;

@@ -4,20 +4,27 @@ body {
 
 .app {
   text-align: center;
+  min-height: 1147px;
   height: 100%;
   width: 1147px;
   margin: 30px auto;
   background-color: #f7f7f7;
-  /* background-color: aquamarine; */
+
+  &__box{
+    max-width: 1010px;
+    min-width: 420px;
+    min-height: 1147px;
+    margin: 0 auto;
+    background: #FFFFFF;
+  }
+  &__spinner{
+    margin-top: 50px;
+  }
 }
 
-.movies {
-  margin: 0 auto;
-  padding: 30px;
-  max-width: 1010px;
-  min-width: 420px;
+.movies {  
+  padding: 30px;  
   display: flex;
   justify-content: space-around;
-  flex-wrap: wrap;
-  background: #FFFFFF;
+  flex-wrap: wrap;  
 }

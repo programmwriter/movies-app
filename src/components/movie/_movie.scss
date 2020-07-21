@@ -1,3 +1,6 @@
+$gold : #e9d100;
+
+
 .movie {
   margin-bottom: 30px;
   max-height: 281px;
@@ -28,4 +31,21 @@
     height: 130px;
     width: 228px;
   }
+  &__vote {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    font-size: 12px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $gold;
+  }
 }
+
+
+
+
