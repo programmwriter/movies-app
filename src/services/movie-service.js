@@ -12,18 +12,18 @@ export default class MovieService {
       throw new Error(`Error in in function getMovies ${response.status}`);
     }
     const requestResult = await response.json();
-
     return requestResult;
   }
 
-  async getMoviesByKeyword(keyword = "return", page = 1) {
+  async getMoviesByKeyword(keyword = "return", pageNumber = 1) {
     const res = await this.request(
-      `${this.apiUrl}search/movie?${this.apiKey}&query=${keyword}&page=${page}&include_adult=true`
+      `${this.apiUrl}search/movie?${this.apiKey}&query=${keyword}&page=${pageNumber}&include_adult=false`
     );
-    const { results: movieByKeyWord, total_results: totalResults } = res;
+    const { results: movieByKeyWord, total_results: totalResults, page } = res;
     return {
       movieByKeyWord,
       totalResults,
+      page,
     };
   }
 
@@ -53,8 +53,8 @@ export default class MovieService {
     return res;
   }
 
-  async getMoviesList(keyword, page = 1) {
-    const {totalResults, movieByKeyWord} = await this.getMoviesByKeyword(keyword, page);
+  async getMoviesList(keyword, pageNumber = 1) {
+    const {totalResults, movieByKeyWord, page} = await this.getMoviesByKeyword(keyword, pageNumber);
 
     const moviesPromisses = movieByKeyWord.map((movie) => {
       return this.getMovieById(movie.id);
@@ -65,6 +65,6 @@ export default class MovieService {
       return movie.status === "fulfilled" ? movie.value : false;
     });
 
-    return {listOfResults, totalResults };
+    return {listOfResults, totalResults, page };
   }
 }

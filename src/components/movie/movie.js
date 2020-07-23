@@ -37,11 +37,11 @@ const Movie = ({ movie }) => {
     >
       <Meta
         title={cropText(originalTitle, 23)}
-        description={format(new Date(releaseDate), "MMMM dd, yyyy")}
+        description={releaseDate? format(new Date(releaseDate), "MMMM dd, yyyy"): null}
       />
       <div className="movie__vote">{voteAverage}</div>
       <div className="movie__genres">
-        <div className="movie__genre">{genres[0].name}</div>
+        <div className="movie__genre">{genres[0]?genres[0].name : null}</div>
       </div>
       <div className="movie__description">{cropText(overview, 230)}</div>
     </Card>

@@ -1,21 +1,38 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import "./_search.scss";
+import { debounce } from 'lodash';
+
 
 export default class Search extends Component {
+  
   static propTypes = {
     onChangeKeyword: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      label: "",
+    };
+
+    this.updateResults = debounce(this.updateResults, 1000);
+  }
   
-  state = {
-    label: "",
+
+  onChangeLabel = ({ target: { value } }) => {
+    this.setState({
+      label:value
+    });
+    this.updateResults(value)        
   };
 
-  onChangeLabel = (event) => {
-    this.setState({
-      label: event.target.value,
-    });
-  };
+  updateResults = (label) => {    
+    const { onChangeKeyword } = this.props;    
+    onChangeKeyword(label);
+  }
+
 
   onSubmit = (event) => {
     event.preventDefault();

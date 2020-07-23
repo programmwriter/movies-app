@@ -15,6 +15,7 @@ export default class App extends Component {
     moviesList: [],
     keyword: "return",
     totalResults: 1,
+    currentPage:1,
     loading: true,
     err: false,
   };
@@ -28,7 +29,7 @@ export default class App extends Component {
 
   onChangeKeyword = (keyword) => {
     this.searchMovies(keyword);
-    this.setState({ keyword });
+    this.setState({ keyword, currentPage:1});
   };
 
   onChangePage = (page) => {
@@ -43,15 +44,16 @@ export default class App extends Component {
     });
   };
 
-  async searchMovies(keyword, page = 1) {
+  async searchMovies(keyword, pageNumber = 1) {
     try {
       const {
         listOfResults: movies,
         totalResults,
-      } = await moviesServ.getMoviesList(keyword, page);
+        page,
+      } = await moviesServ.getMoviesList(keyword, pageNumber);
 
       this.setState(() => {
-        return { moviesList: movies, totalResults, loading: false };
+        return { moviesList: movies, totalResults, currentPage:page,  loading: false };
       });
     } catch (error) {
       this.onError();
@@ -59,7 +61,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { moviesList, totalResults, loading, err } = this.state;
+    const { moviesList, totalResults,currentPage,  loading, err } = this.state;
 
     const hasData = !(loading || err);
     const errorMsg = err ? (
@@ -76,6 +78,7 @@ export default class App extends Component {
       <MovieView
         moviesList={moviesList}
         totalResults={totalResults}
+        currentPage={currentPage}
         onChangePage={this.onChangePage}
       />
     ) : null;
@@ -95,7 +98,7 @@ export default class App extends Component {
 }
 
 const MovieView = (props) => {
-  const { moviesList, totalResults, onChangePage } = props;
+  const { moviesList, totalResults, onChangePage,currentPage } = props;
 
   return (
     <>
@@ -104,6 +107,7 @@ const MovieView = (props) => {
       </div>
       <div className="pagination">
         <Pagination
+          current={currentPage}
           onChange={onChangePage}
           size="small"
           total={totalResults}
@@ -118,5 +122,6 @@ const MovieView = (props) => {
 MovieView.propTypes = {
   moviesList: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalResults: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
 };
