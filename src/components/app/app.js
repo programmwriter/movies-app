@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import "antd/dist/antd.css";
-import "./_app.scss";
-import { Pagination, Spin, Result } from "antd";
+import {  Spin } from "antd";
 import MovieService from "../../services/movie-service";
 import Filter from "../filter";
-import MoviesList from "../movies-list";
 import Search from "../search";
+import ErrorView from '../errorView';
+import MovieView from '../movieView';
+
+import "antd/dist/antd.css";
+import "./_app.scss";
 
 const moviesServ = new MovieService();
 
@@ -14,7 +15,7 @@ export default class App extends Component {
   state = {
     moviesList: [],
     keyword: "return",
-    totalResults: 1,
+    totalResults: 0,
     currentPage:1,
     loading: true,
     err: false,
@@ -61,20 +62,25 @@ export default class App extends Component {
   }
 
   render() {
-    const { moviesList, totalResults,currentPage,  loading, err } = this.state;
+    const { moviesList, 
+            totalResults,
+            currentPage, 
+            loading, 
+            err } = this.state;
 
-    const hasData = !(loading || err);
-    const errorMsg = err ? (
-      <Result
-        status="404"
-        title="404"
-        subTitle="Sorry, you have problem with network."
-      />
+    const hasData = !(loading || err || !totalResults);
+    const hasError = ((!totalResults|| err)&& !loading);
+    const errorView = hasError ? (
+      <ErrorView  totalResults = {totalResults}
+                  err = {err}
+      />      
     ) : null;
-    const spinner = loading ? (
+
+    const spinnerView = loading ? (
       <Spin className="app__spinner" tip="Loading..." size="large" />
     ) : null;
-    const content = hasData ? (
+
+    const contentView = hasData ? (
       <MovieView
         moviesList={moviesList}
         totalResults={totalResults}
@@ -88,40 +94,11 @@ export default class App extends Component {
         <div className="app__box">
           <Filter />
           <Search onChangeKeyword={this.onChangeKeyword} />
-          {errorMsg}
-          {spinner}
-          {content}
+          {errorView}
+          {spinnerView}
+          {contentView}
         </div>
       </div>
     );
   }
 }
-
-const MovieView = (props) => {
-  const { moviesList, totalResults, onChangePage,currentPage } = props;
-
-  return (
-    <>
-      <div className="movies">
-        <MoviesList moviesList={moviesList} />
-      </div>
-      <div className="pagination">
-        <Pagination
-          current={currentPage}
-          onChange={onChangePage}
-          size="small"
-          total={totalResults}
-          defaultPageSize={20}
-          showSizeChanger={false}
-        />
-      </div>
-    </>
-  );
-};
-
-MovieView.propTypes = {
-  moviesList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  totalResults: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
-};
