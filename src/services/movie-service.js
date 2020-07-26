@@ -5,6 +5,8 @@ export default class MovieService {
 
   apiKey = "api_key=ecf3c5005e3bff24ebd3d04c9fd02572";
 
+  
+
   async request(url) {
     const response = await fetch(url);
 
@@ -15,13 +17,30 @@ export default class MovieService {
     return requestResult;
   }
 
+  async requestPost(url, data) {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error in in function getMovies ${response.status}`);
+    }
+    const requestResult = await response.json();
+
+    return requestResult;
+  }
+
   async getMoviesByKeyword(keyword = "return", pageNumber = 1) {
     const res = await this.request(
       `${this.apiUrl}search/movie?${this.apiKey}&query=${keyword}&page=${pageNumber}&include_adult=false`
     );
-    const { results: movieByKeyWord, total_results: totalResults, page } = res;
+    const { results: moviesByKeyWord, total_results: totalResults, page } = res;
     return {
-      movieByKeyWord,
+      moviesByKeyWord,
       totalResults,
       page,
     };
@@ -54,9 +73,9 @@ export default class MovieService {
   }
 
   async getMoviesList(keyword, pageNumber = 1) {
-    const {totalResults, movieByKeyWord, page} = await this.getMoviesByKeyword(keyword, pageNumber);
+    const {totalResults, moviesByKeyWord, page} = await this.getMoviesByKeyword(keyword, pageNumber);
 
-    const moviesPromisses = movieByKeyWord.map((movie) => {
+    const moviesPromisses = moviesByKeyWord.map((movie) => {
       return this.getMovieById(movie.id);
     });
     const movies = await Promise.allSettled(moviesPromisses);
@@ -66,5 +85,47 @@ export default class MovieService {
     });
 
     return {listOfResults, totalResults, page };
+  }
+
+  async getGenres(){
+    const res = await this.request(
+      `${this.apiUrl}genre/movie/list?${this.apiKey}&language=en-US`
+    );
+    
+    return res;
+  }
+
+  async createGuestSession(){
+    const res = await this.request(
+      `${this.apiUrl}authentication/guest_session/new?api_key=${this.apiKey}`
+    );
+    if(!res.success){
+      throw new Error('Tern of your addblock');
+    }
+    return res.guest_session_id;
+  }
+
+  async rateMovieById(movieId, guestSessionId, data){
+    const res = await this.requestPost(
+      `${this.apiUrl}movie/${movieId}/rating?api_key=${this.apiKey}&guest_session_id=${guestSessionId}`,
+      data
+    );
+    if(res.status_code !== 1){
+      throw new Error(res.status_message);
+    }
+    return res.status_message;
+  }
+
+  async getRatedMovies(guestSessionId){
+    const res = await this.request(
+      `${this.apiUrl}guest_session/${guestSessionId}/rated/movies?api_key=${this.apiKey}=en-US&sort_by=created_at.asc`
+    );
+    const { results: ratedMovies, total_results: totalResults, page } = res;
+    return {
+      ratedMovies,
+      totalResults,
+      page,
+    };
+
   }
 }
