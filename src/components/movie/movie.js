@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { format } from "date-fns";
 import "./_movie.scss";
 
-import { Card } from "antd";
+import { Card, Rate } from "antd";
 
 const { Meta } = Card;
 
@@ -43,7 +43,8 @@ const Movie = ({ movie }) => {
       <div className="movie__genres">
         <div className="movie__genre">{genres[0]?genres[0].name : null}</div>
       </div>
-      <div className="movie__description">{cropText(overview, 230)}</div>
+      <div className="movie__description">{cropText(overview, 200)}</div>
+      <Rate count = {10} allowHalf style={{ fontSize: 15 }}/>
     </Card>
   );
 };
