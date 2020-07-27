@@ -26,13 +26,20 @@ export default class App extends Component {
     err: false,
   };
 
-  componentDidMount() {
-    const { movieList, keyword } = this.state;
-    if (!movieList) {
-      this.searchMovies(keyword);
+  async componentDidMount() {
+    
+    const { movieList, keyword, genres } = this.state;
+
+    if(!genres.length){
+      await this.searchGenres(); 
     }
 
-    this.searchGenres();
+    
+    if (!movieList) {
+      await this.searchMovies(keyword);
+    }
+
+    
   }
 
   onChangeKeyword = (keyword) => {

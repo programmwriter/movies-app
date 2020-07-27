@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import { format } from "date-fns";
 import "./_movie.scss";
 import { Card, Rate } from "antd";
+// import { v4 as uuidv4 } from "uuid";
+import Genres from '../genres';
 
-import {GenresConsumer} from '../genres-context';
+// import {GenresConsumer} from '../genres-context';
 
 
 const { Meta } = Card;
@@ -44,33 +46,8 @@ const Movie = ({ movie }) => {
         description={releaseDate? format(new Date(releaseDate), "MMMM dd, yyyy"): null}
       />
       <div className="movie__vote">{voteAverage}</div>
-     
-      <div className="movie__genres">
-      <GenresConsumer>
-        {(genresList) => {
-          
-          const genresView = genres.map((genreId) => {
-            // const name = genresList.filter(item => item.id === genreId)
-            let genre = '';
-
-
-            for (const item in genresList){
-              
-              if (item.id === genreId){
-                genre = item.name;
-              }
-              
-            }
-
-          return (<div className="movie__genre">{genre}</div>)
-          });
-          return(
-            genresView
-          )
-        }}
-    </GenresConsumer>
-        {/* <div className="movie__genre">{genres[0]?genres[0].name : null}</div> */}
-      </div>
+      <Genres genres = {genres}/>     
+      
       <div className="movie__description">{cropText(overview, 200)}</div>
       <Rate count = {10} allowHalf style={{ fontSize: 15 }}/>
     </Card>
