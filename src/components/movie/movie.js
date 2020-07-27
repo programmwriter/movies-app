@@ -25,8 +25,10 @@ const cropText = (text, maxLength = 1000) => {
 
 
 
-const Movie = ({ movie }) => {
+const Movie = ({ movie, rateMovie }) => {
   const {
+    id,
+    rating,
     original_title:originalTitle = "title",
     poster_path:imgUrl,
     overview = "overview",
@@ -49,7 +51,9 @@ const Movie = ({ movie }) => {
       <Genres genres = {genres}/>     
       
       <div className="movie__description">{cropText(overview, 200)}</div>
-      <Rate count = {10} allowHalf style={{ fontSize: 15 }}/>
+      <Rate count = {10} allowHalf  defaultValue = {rating} style={{ fontSize: 15 }} onChange ={(value)=>{        
+        rateMovie(id, {value});
+      }}/>
     </Card>
   );
 };
@@ -59,25 +63,16 @@ const Movie = ({ movie }) => {
 Movie.propTypes = {
   movie: PropTypes.shape({
     id:PropTypes.number,
+    rating:PropTypes.number,
     original_title: PropTypes.string,
     poster_path: PropTypes.string,
     overview: PropTypes.string,
     release_date: PropTypes.string,
     vote_average: PropTypes.number,
     genre_ids: PropTypes.arrayOf(PropTypes.number),
-  }),
+  }).isRequired,
+  rateMovie: PropTypes.func.isRequired,
 };
 
-Movie.defaultProps = {
-  movie: {
-    id:8965,
-    release_date: "2003-02-25",
-    original_title: "originalTitle",
-    genres: [{ name: "genre" }],
-    overview: "overview",
-    vote_average: 0,
-    poster_path: "/c9siOypFgzsKL4LQI1d3EkDN6U3.jpg",
-  },
-};
 
 export default Movie;

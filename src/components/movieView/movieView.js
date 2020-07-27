@@ -5,12 +5,12 @@ import MoviesList from "../movies-list";
 
 
 const MovieView = (props) => {
-  const { moviesList, totalResults, onChangePage,currentPage } = props;
+  const { moviesList, totalResults, onChangePage,currentPage,rateMovie } = props;
 
   return (
     <>
       <div className="movies">
-        <MoviesList moviesList={moviesList} />
+        <MoviesList moviesList={moviesList} rateMovie = {rateMovie}/>
       </div>
       <div className="pagination">
         <Pagination
@@ -31,6 +31,7 @@ MovieView.propTypes = {
   totalResults: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
+  rateMovie: PropTypes.func.isRequired,
 };
 
 export default MovieView;

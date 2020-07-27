@@ -95,19 +95,19 @@ export default class MovieService {
     return res;
   }
 
-  async createGuestSession(){
+  async getGuestSession(){
     const res = await this.request(
-      `${this.apiUrl}authentication/guest_session/new?api_key=${this.apiKey}`
+      `${this.apiUrl}authentication/guest_session/new?${this.apiKey}`
     );
     if(!res.success){
       throw new Error('Tern of your addblock');
     }
-    return res.guest_session_id;
+    return res;
   }
 
   async rateMovieById(movieId, guestSessionId, data){
     const res = await this.requestPost(
-      `${this.apiUrl}movie/${movieId}/rating?api_key=${this.apiKey}&guest_session_id=${guestSessionId}`,
+      `${this.apiUrl}movie/${movieId}/rating?${this.apiKey}&guest_session_id=${guestSessionId}`,
       data
     );
     if(res.status_code !== 1){
@@ -118,7 +118,7 @@ export default class MovieService {
 
   async getRatedMovies(guestSessionId){
     const res = await this.request(
-      `${this.apiUrl}guest_session/${guestSessionId}/rated/movies?api_key=${this.apiKey}=en-US&sort_by=created_at.asc`
+      `${this.apiUrl}guest_session/${guestSessionId}/rated/movies?${this.apiKey}&language=en-US&sort_by=created_at.asc`
     );
     const { results: ratedMovies, total_results: totalResults, page } = res;
     return {
