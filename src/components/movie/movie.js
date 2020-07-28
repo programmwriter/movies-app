@@ -33,9 +33,33 @@ const Movie = ({ movie, rateMovie }) => {
     poster_path:imgUrl,
     overview = "overview",
     release_date:releaseDate = "2003-02-25",
-    genre_ids:genres = [{ name: "genre" }, { name: "genre" }],
+    genre_ids:genres ,
     vote_average:voteAverage = 0,
   } = movie;
+
+  let voteClass = 'gold';
+
+  switch(true) {
+    case (voteAverage < 3) :  
+    voteClass = 'red';   
+      break
+
+    case (voteAverage > 3 && voteAverage < 5 ):  
+    voteClass = 'orange';   
+      break
+
+    case (voteAverage > 5 && voteAverage <= 7 ):  
+    voteClass = 'gold';   
+      break
+
+    case (voteAverage > 7):  
+    voteClass = 'green';   
+      break
+
+    default:
+       
+      break
+  }
 
   return (
     <Card
@@ -47,7 +71,7 @@ const Movie = ({ movie, rateMovie }) => {
         title={cropText(originalTitle, 23)}
         description={releaseDate? format(new Date(releaseDate), "MMMM dd, yyyy"): null}
       />
-      <div className="movie__vote">{voteAverage}</div>
+      <div className= {`movie__vote movie__vote__${voteClass}`}>{voteAverage}</div>
       <Genres genres = {genres}/>     
       
       <div className="movie__description">{cropText(overview, 200)}</div>

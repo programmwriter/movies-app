@@ -46,7 +46,7 @@ export default class App extends Component {
 
   onChangeKeyword = (keyword) => {
     this.searchMovies(keyword);
-    this.setState({ keyword, currentPage:1});
+    this.setState({ keyword, currentPage:1, err:false});
   };
 
   onChangePage = (page) => {

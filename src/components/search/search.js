@@ -50,9 +50,9 @@ export default class Search extends Component {
     const { label } = this.state;
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <form className="search" onSubmit={this.onSubmit}>
         <input
-          className="search"
+          className="search__query"
           placeholder="Type to search..."
           onChange={this.onChangeLabel}
           value={label}

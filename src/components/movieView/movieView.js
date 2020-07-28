@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import { Pagination} from "antd";
 import MoviesList from "../movies-list";
-
+import './_movieView.scss';
 
 const MovieView = (props) => {
   const { moviesList, totalResults, onChangePage,currentPage,rateMovie } = props;

@@ -1,0 +1,30 @@
+.search{
+  padding: 0 40px;
+  &__query{
+    text-indent: 10px;
+    height: 40px;
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid #D9D9D9;
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
+  &__query input::-webkit-input-placeholder {
+    font-size: 16px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.25);
+  }
+  
+  &__query input::-moz-placeholder {
+    font-size: 16px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.25);
+  }
+  
+  &__query input::input-placeholder {
+    font-size: 16px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+}

@@ -1,4 +1,7 @@
-$gold : #e9d100;
+$vote_red : #E90000;
+$vote_orange : #E97E00;
+$vote_gold : #E9D100;
+$vote_green : #66E900;
 
 
 .movie {
@@ -43,8 +46,26 @@ $gold : #e9d100;
     font-size: 12px;
     align-items: center;
     justify-content: center;
-    border: 2px solid $gold;
+    border: 2px solid ;
+
+    &__red{
+      border-color: $vote_red;
+    }
+
+    &__orange{
+      border-color: $vote_orange;
+    }
+
+    &__gold{
+      border-color: $vote_gold;
+    }
+
+    &__green{
+      border-color: $vote_green;
+    }
   }
+
+
 }
 
 

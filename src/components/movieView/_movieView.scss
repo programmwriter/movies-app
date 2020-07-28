@@ -1,0 +1,16 @@
+.pagination{
+  margin-bottom: 15px;
+}
+
+.ant-pagination-item{
+  height:22px !important;
+  width:22px !important;
+  border-radius: 4px !important;
+  &-active{
+    background: #1890ff !important;
+    color: white !important;
+    & a {
+      color: white !important;
+    }
+  }
+}
