@@ -1,1 +1,2 @@
-React. Практическая задача 2.1.9
+React. Практическая задача Movies App
+Ссылка на развернутое приложение https://movies-app-chi.vercel.app/
