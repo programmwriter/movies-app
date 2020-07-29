@@ -30,7 +30,9 @@ export default class Search extends Component {
 
   updateResults = (label) => {    
     const { onChangeKeyword } = this.props;    
-    onChangeKeyword(label);
+    if (label.trim()) {
+      onChangeKeyword(label);
+    }
   }
 
 
@@ -39,7 +41,9 @@ export default class Search extends Component {
     const { onChangeKeyword } = this.props;
     const { label } = this.state;
 
-    onChangeKeyword(label);
+    if (label.trim()) {
+      onChangeKeyword(label);
+    }    
 
     this.setState({
       label: "",

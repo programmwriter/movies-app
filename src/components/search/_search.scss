@@ -1,14 +1,31 @@
+$md: 768px;
+
 .search{
+  display: flex;
+  justify-content: center;
   padding: 0 40px;
+
+    @media screen and (max-width: $md) {  
+      display: flex;
+      justify-content: center;
+      padding: 0;
+    }
+
   &__query{
-    text-indent: 10px;
+    display: block;
+    text-indent: 10px;    
     height: 40px;
     width: 100%;
     background: #FFFFFF;
     border: 1px solid #D9D9D9;
     box-sizing: border-box;
     border-radius: 4px;
+
+      @media screen and (max-width: $md) {
+        width: 385px !important;
+      }
   }
+  
   &__query input::-webkit-input-placeholder {
     font-size: 16px;
     line-height: 22px;

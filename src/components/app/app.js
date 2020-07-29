@@ -66,11 +66,11 @@ export default class App extends Component {
     const { keyword } = this.state;
     switch(key) {
       case '1':  
-      await this.searchMovies(keyword);      
+      await this.searchMovies(keyword);     
         break
     
       case '2':  
-      await this.searchRatedMovies();      
+      await this.searchRatedMovies();       
         break
     
       default:

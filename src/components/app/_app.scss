@@ -1,3 +1,9 @@
+$small: 320px;
+$sm: 350px;
+$md: 768px;
+$lg: 1120px;
+$screen-xl: 1440px;
+
 body {
   background-color: #e5e5e5;
 }
@@ -6,9 +12,18 @@ body {
   text-align: center;
   min-height: 1147px;
   height: 100%;
-  width: 1147px;
+  max-width: 1147px;
+  min-width: 420px;
   margin: 30px auto;
   background-color: #f7f7f7;
+
+  @media screen and (max-width: $md) {
+    
+  }
+  //planshet
+  // @media screen and (max-width: $lg) and (min-width: $sm) {
+  //   padding-left: 24px;
+  // }
 
   &__box{
     max-width: 1010px;

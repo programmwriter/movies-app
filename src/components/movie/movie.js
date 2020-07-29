@@ -75,7 +75,7 @@ const Movie = ({ movie, rateMovie }) => {
       <Genres genres = {genres}/>     
       
       <div className="movie__description">{cropText(overview, 200)}</div>
-      <Rate count = {10} allowHalf  defaultValue = {rating} style={{ fontSize: 15 }} onChange ={(value)=>{        
+      <Rate className="movie__rate" count = {10} allowHalf  defaultValue = {rating} style={{ fontSize: 15 }} onChange ={(value)=>{        
         rateMovie(id, {value});
       }}/>
     </Card>
