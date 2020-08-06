@@ -1,25 +1,25 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
 import { Result } from "antd";
-import errMsgs from './errMsg';
+import errMsgs from "./errMsg";
 
-const ErrorView = ({totalResults, err}) => {
-  let errType = '';
+const ErrorView = ({ totalResults, err }) => {
+  let errType = "";
 
-  if(!totalResults){
-    errType = 'totalResults';
-  }else if(err){
-    errType = 'err';
+  if (!totalResults) {
+    errType = "totalResults";
+  } else if (err) {
+    errType = "err";
   }
 
   return (
     <Result
-        status={errMsgs[errType].status}
-        title={errMsgs[errType].status}
-        subTitle = {errMsgs[errType].msg}
-      />
+      status={errMsgs[errType].status}
+      title={errMsgs[errType].status}
+      subTitle={errMsgs[errType].msg}
+    />
   );
-}
+};
 
 ErrorView.propTypes = {
   totalResults: PropTypes.number.isRequired,

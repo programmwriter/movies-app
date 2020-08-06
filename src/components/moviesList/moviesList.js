@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./_movies-list.scss";
+import "./_moviesList.scss";
 
 import Movie from "../movie";
 

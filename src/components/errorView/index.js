@@ -1,3 +1,3 @@
-import ErrorView from './errorView';
+import ErrorView from "./errorView";
 
 export default ErrorView;

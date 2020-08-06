@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import "./_search.scss";
-import { debounce } from 'lodash';
-
+import { debounce } from "lodash";
 
 export default class Search extends Component {
-  
   static propTypes = {
     onChangeKeyword: PropTypes.func.isRequired,
   };
@@ -19,22 +17,20 @@ export default class Search extends Component {
 
     this.updateResults = debounce(this.updateResults, 1000);
   }
-  
 
   onChangeLabel = ({ target: { value } }) => {
     this.setState({
-      label:value
+      label: value,
     });
-    this.updateResults(value)        
+    this.updateResults(value);
   };
 
-  updateResults = (label) => {    
-    const { onChangeKeyword } = this.props;    
+  updateResults = (label) => {
+    const { onChangeKeyword } = this.props;
     if (label.trim()) {
       onChangeKeyword(label);
     }
-  }
-
+  };
 
   onSubmit = (event) => {
     event.preventDefault();
@@ -43,7 +39,7 @@ export default class Search extends Component {
 
     if (label.trim()) {
       onChangeKeyword(label);
-    }    
+    }
 
     this.setState({
       label: "",

@@ -18,7 +18,6 @@ export default class MovieService {
 
     if (!response.ok) {
       throw new Error(`Error in function getMovies ${response.status}`);
-      
     }
     const requestResult = await response.json();
 
@@ -78,7 +77,6 @@ export default class MovieService {
     const listOfResults = movies.map((movie) => {
       return movie.status === "fulfilled" ? movie.value : false;
     });
-    
 
     return { listOfResults, totalResults, page };
   }

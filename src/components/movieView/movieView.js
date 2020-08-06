@@ -1,16 +1,22 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
-import { Pagination} from "antd";
-import MoviesList from "../movies-list";
-import './_movieView.scss';
+import { Pagination } from "antd";
+import MoviesList from "../moviesList";
+import "./_movieView.scss";
 
 const MovieView = (props) => {
-  const { moviesList, totalResults, onChangePage,currentPage,rateMovie } = props;
+  const {
+    moviesList,
+    totalResults,
+    onChangePage,
+    currentPage,
+    rateMovie,
+  } = props;
 
   return (
     <>
       <div className="movies">
-        <MoviesList moviesList={moviesList} rateMovie = {rateMovie}/>
+        <MoviesList moviesList={moviesList} rateMovie={rateMovie} />
       </div>
       <div className="pagination">
         <Pagination

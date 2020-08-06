@@ -1,3 +1,3 @@
-import MovieView from './movieView';
+import MovieView from "./movieView";
 
 export default MovieView;
