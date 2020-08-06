@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { Spin, Tabs } from "antd";
 import MovieService from "../../services/movieService";
-// import Search from "../search";
+import Search from "../search";
 import ErrorView from "../errorView";
 import MovieView from "../movieView";
-import MoviesView from "../moviesView";
 import { GenresProvider } from "../genresContext";
 
 import "antd/dist/antd.css";
@@ -158,7 +157,6 @@ export default class App extends Component {
       loading,
       genres,
       err,
-      guestSessionId,
     } = this.state;
 
     const hasData = !(loading || err || !totalResults);
@@ -173,34 +171,33 @@ export default class App extends Component {
     ) : null;
 
     const contentView = hasData ? (
-      <MovieView
-        moviesList={moviesList}
-        totalResults={totalResults}
-        currentPage={currentPage}
-        onChangePage={this.onChangePage}
-        rateMovie={this.rateMovie}
-      />
+      <GenresProvider value={genres}>
+        <MovieView
+          moviesList={moviesList}
+          totalResults={totalResults}
+          currentPage={currentPage}
+          onChangePage={this.onChangePage}
+          rateMovie={this.rateMovie}
+        />
+      </GenresProvider>
     ) : null;
 
     return (
       <div className="app">
         <div className="app__box">
-          <GenresProvider value={genres}>
-            <Tabs defaultActiveKey="1" onChange={this.onChangeTab}>
-              <TabPane tab="Searh" key="1">
-                {/* <Search onChangeKeyword={this.onChangeKeyword} /> */}
-                {/* {errorView}
+          <Tabs defaultActiveKey="1" onChange={this.onChangeTab}>
+            <TabPane tab="Searh" key="1">
+              <Search onChangeKeyword={this.onChangeKeyword} />
+              {errorView}
               {spinnerView}
-              {contentView} */}
-                <MoviesView guestSessionId={guestSessionId} />
-              </TabPane>
-              <TabPane tab="Rated" key="2">
-                {errorView}
-                {spinnerView}
-                {contentView}
-              </TabPane>
-            </Tabs>
-          </GenresProvider>
+              {contentView}
+            </TabPane>
+            <TabPane tab="Rated" key="2">
+              {errorView}
+              {spinnerView}
+              {contentView}
+            </TabPane>
+          </Tabs>
         </div>
       </div>
     );

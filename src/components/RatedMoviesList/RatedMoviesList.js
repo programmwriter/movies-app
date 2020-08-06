@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import MovieService from "../../services/movieService";
 
-import "./_RatedMoviesList.scss";
+// import "./_ratedMoviesList.scss";
 
 import Movie from "../movie";
 

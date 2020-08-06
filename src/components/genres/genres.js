@@ -8,13 +8,16 @@ const Genres = ({ genres }) => {
   return (
     <div className="genres">
       <GenresConsumer>
-        {(genresList) => {
-          const [first, second] = genres.map((genreId) => {
-            const [one] = genresList.filter((item) => item.id === genreId);
-            const { id, name } = one;
+        {() => {
+          // {(genresList) => {
+          const [first, second] = genres.map((genreId, idd) => {
+            // const [one] = genresList.filter((item) => item.id === genreId);
+            // const { id, name } = one;
+
             return (
-              <div key={`${id}`} className="genres__item">
-                {name}
+              <div key={`${idd * 3}`} className="genres__item">
+                {/* {name} */}
+                {"name"}
               </div>
             );
           });
