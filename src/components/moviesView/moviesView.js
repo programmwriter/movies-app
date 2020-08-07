@@ -93,10 +93,6 @@ const MoviesView = ({ guestSessionId }) => {
 
 MoviesView.propTypes = {
   guestSessionId: PropTypes.string.isRequired,
-  // totalResults: PropTypes.number.isRequired,
-  // currentPage: PropTypes.number.isRequired,
-  // onChangePage: PropTypes.func.isRequired,
-  // rateMovie: PropTypes.func.isRequired,
 };
 
 export default MoviesView;
