@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { Spin, Tabs } from "antd";
+import { Tabs } from "antd";
 import MovieService from "../../services/movieService";
-// import Search from "../search";
-import ErrorView from "../errorView";
-import MovieView from "../movieView";
 import MoviesView from "../moviesView";
+import RatedMoviesView from "../ratedMoviesView";
 import { GenresProvider } from "../genresContext";
 
 import "antd/dist/antd.css";
@@ -16,72 +14,19 @@ const { TabPane } = Tabs;
 export default class App extends Component {
   state = {
     guestSessionId: "",
-    moviesList: [],
-    keyword: "return",
-    totalResults: 0,
-    currentPage: 1,
     genres: [],
-    loading: true,
-    err: false,
+    loadingGenres: true,
   };
 
   async componentDidMount() {
-    const { movieList, keyword, genres, guestSessionId } = this.state;
-
+    const { genres, guestSessionId } = this.state;
     if (!guestSessionId) {
       await this.createGuestSession();
     }
     if (!genres.length) {
       await this.searchGenres();
     }
-
-    if (!movieList) {
-      await this.searchMovies(keyword);
-    }
   }
-
-  onChangeKeyword = (keyword) => {
-    this.searchMovies(keyword);
-    this.setState({ keyword, currentPage: 1, err: false });
-  };
-
-  onChangePage = (page) => {
-    const { keyword } = this.state;
-    this.searchMovies(keyword, page);
-  };
-
-  onError = () => {
-    this.setState({
-      err: true,
-      loading: false,
-    });
-  };
-
-  onChangeTab = async (key) => {
-    const { keyword } = this.state;
-    switch (key) {
-      case "1":
-        await this.searchMovies(keyword);
-        break;
-
-      case "2":
-        await this.searchRatedMovies();
-        break;
-
-      default:
-        await this.searchMovies(keyword);
-        break;
-    }
-  };
-
-  rateMovie = async (movieId, data) => {
-    const { guestSessionId } = this.state;
-    try {
-      await moviesServ.rateMovieById(movieId, guestSessionId, data);
-    } catch (error) {
-      this.onError();
-    }
-  };
 
   async createGuestSession() {
     try {
@@ -100,50 +45,7 @@ export default class App extends Component {
     try {
       const { genres } = await moviesServ.getGenres();
       this.setState(() => {
-        return { genres };
-      });
-    } catch (error) {
-      this.onError();
-    }
-  }
-
-  async searchMovies(keyword, pageNumber = 1) {
-    try {
-      const {
-        moviesByKeyWord: movies,
-        totalResults,
-        page,
-      } = await moviesServ.getMoviesByKeyword(keyword, pageNumber);
-
-      this.setState(() => {
-        return {
-          moviesList: movies,
-          totalResults,
-          currentPage: page,
-          loading: false,
-        };
-      });
-    } catch (error) {
-      this.onError();
-    }
-  }
-
-  async searchRatedMovies() {
-    const { guestSessionId } = this.state;
-    try {
-      const {
-        ratedMovies: movies,
-        totalResults,
-        page,
-      } = await moviesServ.getRatedMovies(guestSessionId);
-
-      this.setState(() => {
-        return {
-          moviesList: movies,
-          totalResults,
-          currentPage: page,
-          loading: false,
-        };
+        return { genres, loadingGenres: false };
       });
     } catch (error) {
       this.onError();
@@ -151,53 +53,24 @@ export default class App extends Component {
   }
 
   render() {
-    const {
-      moviesList,
-      totalResults,
-      currentPage,
-      loading,
-      genres,
-      err,
-      guestSessionId,
-    } = this.state;
-
-    const hasData = !(loading || err || !totalResults);
-    const hasError = (!totalResults || err) && !loading;
-
-    const errorView = hasError ? (
-      <ErrorView totalResults={totalResults} err={err} />
-    ) : null;
-
-    const spinnerView = loading ? (
-      <Spin className="app__spinner" tip="Loading..." size="large" />
-    ) : null;
-
-    const contentView = hasData ? (
-      <MovieView
-        moviesList={moviesList}
-        totalResults={totalResults}
-        currentPage={currentPage}
-        onChangePage={this.onChangePage}
-        rateMovie={this.rateMovie}
-      />
-    ) : null;
+    const { genres, guestSessionId, loadingGenres } = this.state;
 
     return (
       <div className="app">
         <div className="app__box">
           <GenresProvider value={genres}>
-            <Tabs defaultActiveKey="1" onChange={this.onChangeTab}>
+            <Tabs defaultActiveKey="1">
               <TabPane tab="Searh" key="1">
-                {/* <Search onChangeKeyword={this.onChangeKeyword} /> */}
-                {/* {errorView}
-              {spinnerView}
-              {contentView} */}
-                <MoviesView guestSessionId={guestSessionId} />
+                <MoviesView
+                  guestSessionId={guestSessionId}
+                  loadingGenres={loadingGenres}
+                />
               </TabPane>
               <TabPane tab="Rated" key="2">
-                {errorView}
-                {spinnerView}
-                {contentView}
+                <RatedMoviesView
+                  guestSessionId={guestSessionId}
+                  loadingGenres={loadingGenres}
+                />
               </TabPane>
             </Tabs>
           </GenresProvider>
