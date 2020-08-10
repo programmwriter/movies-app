@@ -45,9 +45,6 @@ export default class MovieService {
     const res = await this.request(
       `${this.apiUrl}genre/movie/list?${process.env.REACT_APP_APIKEY}&language=en-US`
     );
-    if (!res.success) {
-      throw new Error("Can`t fetch genres");
-    }
     return res;
   }
 
