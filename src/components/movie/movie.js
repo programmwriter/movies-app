@@ -3,10 +3,7 @@ import PropTypes from "prop-types";
 import { format } from "date-fns";
 import "./_movie.scss";
 import { Card, Rate } from "antd";
-// import { v4 as uuidv4 } from "uuid";
 import Genres from "../genres";
-
-// import {GenresConsumer} from '../genres-context';
 
 const { Meta } = Card;
 

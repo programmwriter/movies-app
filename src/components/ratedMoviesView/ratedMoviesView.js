@@ -12,22 +12,22 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres }) => {
   const [moviesList, setMoviesList] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
   const searchRatedMovies = async () => {
-    try {
-      const {
-        ratedMovies: movies,
-        totalResults: total,
-        page,
-      } = await moviesServ.getRatedMovies(guestSessionId);
+    const getMoviesResponse = await moviesServ.getRatedMovies(guestSessionId);
+
+    if (getMoviesResponse === "Failed to fetch") {
+      setErr("Sorry, you have problem with network");
+      setLoading(false);
+    } else {
+      const { results: movies, total_results: total, page } = getMoviesResponse;
+      if (!total) setErr("You should rate movie first.");
       setMoviesList(movies);
       setTotalResults(total);
       setCurrentPage(page);
       setLoading(false);
-    } catch (error) {
-      setErr(true);
     }
   };
 
@@ -39,9 +39,7 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres }) => {
 
   const hasError = (!totalResults || err) && !loading && !loadingGenres;
 
-  const errorView = hasError ? (
-    <ErrorView totalResults={totalResults} err={err} />
-  ) : null;
+  const errorView = hasError ? <ErrorView err={err} /> : null;
 
   const spinnerView = loading ? (
     <Spin className="app__spinner" tip="Loading..." size="large" />

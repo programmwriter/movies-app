@@ -14,23 +14,25 @@ const MoviesView = ({ guestSessionId, loadingGenres }) => {
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [keyword, setKeyword] = useState(1);
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
   const searchMovies = async (queryWord, pageNumber = 1) => {
-    try {
-      const {
-        moviesByKeyWord: movies,
-        totalResults: total,
-        page,
-      } = await moviesServ.getMoviesByKeyword(queryWord, pageNumber);
+    const getMoviesResponse = await moviesServ.getMoviesByKeyword(
+      queryWord,
+      pageNumber
+    );
 
+    if (getMoviesResponse === "Failed to fetch") {
+      setErr("Sorry, you have problem with network");
+      setLoading(false);
+    } else {
+      const { results: movies, total_results: total, page } = getMoviesResponse;
+      if (!total) setErr("Sorry, no results were found for your search.");
       setMoviesList(movies);
       setTotalResults(total);
       setCurrentPage(page);
       setLoading(false);
-    } catch (error) {
-      setErr(true);
     }
   };
 
@@ -49,7 +51,7 @@ const MoviesView = ({ guestSessionId, loadingGenres }) => {
     try {
       await moviesServ.rateMovieById(movieId, guestSessionId, data);
     } catch (error) {
-      setErr(true);
+      setErr("Error with reate this movie");
     }
   };
 
@@ -61,9 +63,7 @@ const MoviesView = ({ guestSessionId, loadingGenres }) => {
 
   const hasError = (!totalResults || err) && !loading && !loadingGenres;
 
-  const errorView = hasError ? (
-    <ErrorView totalResults={totalResults} err={err} />
-  ) : null;
+  const errorView = hasError ? <ErrorView err={err} /> : null;
 
   const spinnerView = loading ? (
     <Spin className="app__spinner" tip="Loading..." size="large" />
