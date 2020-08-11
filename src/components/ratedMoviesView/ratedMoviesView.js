@@ -8,7 +8,7 @@ import MovieService from "../../services/movieService";
 
 const moviesServ = new MovieService();
 
-const RatedMoviesView = ({ guestSessionId, loadingGenres, tab }) => {
+const RatedMoviesView = ({ guestSessionId, loadingGenres, tab, isRated }) => {
   const [moviesList, setMoviesList] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +28,7 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres, tab }) => {
           total_results: total,
           page,
         } = getMoviesResponse;
-        if (!total) {
+        if (!total && !isRated) {
           setErr("You should rate movie first.");
           setLoading(false);
         } else {
@@ -41,15 +41,17 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres, tab }) => {
       }
     };
     searchRatedMovies();
-  }, [tab, guestSessionId]);
+  }, [tab, guestSessionId, isRated]);
 
   const hasData = !(loading || loadingGenres || err || !totalResults);
 
   const hasError = (!totalResults || err) && !loading && !loadingGenres;
 
+  const isLoading = loading;
+
   const errorView = hasError ? <ErrorView err={err} /> : null;
 
-  const spinnerView = loading ? (
+  const spinnerView = isLoading ? (
     <Spin className="app__spinner" tip="Loading..." size="large" />
   ) : null;
 
@@ -82,6 +84,7 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres, tab }) => {
 RatedMoviesView.propTypes = {
   guestSessionId: PropTypes.string.isRequired,
   loadingGenres: PropTypes.bool.isRequired,
+  isRated: PropTypes.bool.isRequired,
   tab: PropTypes.number.isRequired,
 };
 

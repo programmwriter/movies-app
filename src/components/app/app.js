@@ -17,6 +17,7 @@ export default class App extends Component {
     genres: [],
     loadingGenres: true,
     tab: 1,
+    isRated: false,
   };
 
   async componentDidMount() {
@@ -32,6 +33,10 @@ export default class App extends Component {
   onChangeTab = async (key) => {
     this.setState({ tab: key });
   };
+
+  setIsRated() {
+    this.setState({ isRated: true });
+  }
 
   async createGuestSession() {
     try {
@@ -58,7 +63,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { genres, guestSessionId, loadingGenres, tab } = this.state;
+    const { genres, guestSessionId, loadingGenres, tab, isRated } = this.state;
 
     return (
       <div className="app">
@@ -69,6 +74,7 @@ export default class App extends Component {
                 <MoviesView
                   guestSessionId={guestSessionId}
                   loadingGenres={loadingGenres}
+                  setIsRated={this.setIsRated}
                 />
               </TabPane>
               <TabPane tab="Rated" key="2">
@@ -76,6 +82,7 @@ export default class App extends Component {
                   guestSessionId={guestSessionId}
                   loadingGenres={loadingGenres}
                   tab={tab}
+                  isRated={isRated}
                 />
               </TabPane>
             </Tabs>
