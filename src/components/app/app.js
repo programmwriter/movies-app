@@ -34,9 +34,9 @@ export default class App extends Component {
     this.setState({ tab: key });
   };
 
-  setIsRated() {
+  setIsRated = () => {
     this.setState({ isRated: true });
-  }
+  };
 
   async createGuestSession() {
     try {

@@ -9,7 +9,7 @@ import MovieService from "../../services/movieService";
 
 const moviesServ = new MovieService();
 
-const MoviesView = ({ guestSessionId, loadingGenres }) => {
+const MoviesView = ({ guestSessionId, loadingGenres, setIsRated }) => {
   const [moviesList, setMoviesList] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,6 +58,7 @@ const MoviesView = ({ guestSessionId, loadingGenres }) => {
     } catch (error) {
       setErr("Error with reate this movie");
     }
+    setIsRated();
   };
 
   const onChangePage = (page) => {
@@ -105,6 +106,7 @@ const MoviesView = ({ guestSessionId, loadingGenres }) => {
 MoviesView.propTypes = {
   guestSessionId: PropTypes.string.isRequired,
   loadingGenres: PropTypes.bool.isRequired,
+  setIsRated: PropTypes.func.isRequired,
 };
 
 export default MoviesView;

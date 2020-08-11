@@ -16,19 +16,24 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres, tab, isRated }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const searchRatedMovies = async () => {
-      const getMoviesResponse = await moviesServ.getRatedMovies(guestSessionId);
+    const searchRatedMovies = async (rated) => {
+      let getMoviesResponse;
 
-      if (getMoviesResponse === "Failed to fetch") {
-        setErr("Sorry, you have problem with network");
-        setLoading(false);
-      } else {
+      if (rated) {
+        getMoviesResponse = await moviesServ.getRatedMovies(guestSessionId);
+
+        if (getMoviesResponse === "Failed to fetch") {
+          setErr("Sorry, you have problem with network");
+          setLoading(false);
+        }
+
         const {
           results: movies,
           total_results: total,
           page,
         } = getMoviesResponse;
-        if (!total && !isRated) {
+
+        if (!total) {
           setErr("You should rate movie first.");
           setLoading(false);
         } else {
@@ -38,9 +43,12 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres, tab, isRated }) => {
           setLoading(false);
           setErr("");
         }
+      } else {
+        setErr("You should rate movie first.");
+        setLoading(false);
       }
     };
-    searchRatedMovies();
+    searchRatedMovies(isRated);
   }, [tab, guestSessionId, isRated]);
 
   const hasData = !(loading || loadingGenres || err || !totalResults);
