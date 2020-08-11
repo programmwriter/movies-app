@@ -9,7 +9,7 @@ const ErrorView = ({ err }) => {
 };
 
 ErrorView.propTypes = {
-  err: PropTypes.bool.isRequired,
+  err: PropTypes.string.isRequired,
 };
 
 export default ErrorView;

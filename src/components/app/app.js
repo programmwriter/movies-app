@@ -16,6 +16,7 @@ export default class App extends Component {
     guestSessionId: "",
     genres: [],
     loadingGenres: true,
+    tab: 1,
   };
 
   async componentDidMount() {
@@ -27,6 +28,10 @@ export default class App extends Component {
       await this.searchGenres();
     }
   }
+
+  onChangeTab = async (key) => {
+    this.setState({ tab: key });
+  };
 
   async createGuestSession() {
     try {
@@ -53,13 +58,13 @@ export default class App extends Component {
   }
 
   render() {
-    const { genres, guestSessionId, loadingGenres } = this.state;
+    const { genres, guestSessionId, loadingGenres, tab } = this.state;
 
     return (
       <div className="app">
         <div className="app__box">
           <GenresProvider value={genres}>
-            <Tabs defaultActiveKey="1">
+            <Tabs defaultActiveKey="1" onChange={this.onChangeTab}>
               <TabPane tab="Searh" key="1">
                 <MoviesView
                   guestSessionId={guestSessionId}
@@ -70,6 +75,7 @@ export default class App extends Component {
                 <RatedMoviesView
                   guestSessionId={guestSessionId}
                   loadingGenres={loadingGenres}
+                  tab={tab}
                 />
               </TabPane>
             </Tabs>

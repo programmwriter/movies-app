@@ -7,6 +7,7 @@ export default class MovieService {
     const [url, data] = params;
     let response = "";
     let requestResult = "";
+
     try {
       response = data
         ? await fetch(url, {
@@ -26,7 +27,7 @@ export default class MovieService {
     return requestResult;
   }
 
-  async getMoviesByKeyword(keyword = "return", pageNumber = 1) {
+  async getMoviesByKeyword(keyword = "war", pageNumber = 1) {
     const res = await this.request(
       `${this.apiUrl}search/movie?${process.env.REACT_APP_APIKEY}&query=${keyword}&page=${pageNumber}&include_adult=false`
     );
@@ -63,9 +64,9 @@ export default class MovieService {
       `${this.apiUrl}movie/${movieId}/rating?${process.env.REACT_APP_APIKEY}&guest_session_id=${guestSessionId}`,
       data
     );
-    if (res.status_code !== 1) {
-      throw new Error(res.status_message);
-    }
+    // if (res.status_code !== 1) {
+    //   throw new Error(res.status_message);
+    // }
     return res.status_message;
   }
 }

@@ -28,11 +28,16 @@ const MoviesView = ({ guestSessionId, loadingGenres }) => {
       setLoading(false);
     } else {
       const { results: movies, total_results: total, page } = getMoviesResponse;
-      if (!total) setErr("Sorry, no results were found for your search.");
-      setMoviesList(movies);
-      setTotalResults(total);
-      setCurrentPage(page);
-      setLoading(false);
+      if (!total) {
+        setErr("Sorry, no results were found for your search.");
+        setLoading(false);
+      } else {
+        setMoviesList(movies);
+        setTotalResults(total);
+        setCurrentPage(page);
+        setLoading(false);
+        setErr("");
+      }
     }
   };
 

@@ -8,32 +8,40 @@ import MovieService from "../../services/movieService";
 
 const moviesServ = new MovieService();
 
-const RatedMoviesView = ({ guestSessionId, loadingGenres }) => {
+const RatedMoviesView = ({ guestSessionId, loadingGenres, tab }) => {
   const [moviesList, setMoviesList] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const searchRatedMovies = async () => {
-    const getMoviesResponse = await moviesServ.getRatedMovies(guestSessionId);
-
-    if (getMoviesResponse === "Failed to fetch") {
-      setErr("Sorry, you have problem with network");
-      setLoading(false);
-    } else {
-      const { results: movies, total_results: total, page } = getMoviesResponse;
-      if (!total) setErr("You should rate movie first.");
-      setMoviesList(movies);
-      setTotalResults(total);
-      setCurrentPage(page);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const searchRatedMovies = async () => {
+      const getMoviesResponse = await moviesServ.getRatedMovies(guestSessionId);
+
+      if (getMoviesResponse === "Failed to fetch") {
+        setErr("Sorry, you have problem with network");
+        setLoading(false);
+      } else {
+        const {
+          results: movies,
+          total_results: total,
+          page,
+        } = getMoviesResponse;
+        if (!total) {
+          setErr("You should rate movie first.");
+          setLoading(false);
+        } else {
+          setMoviesList(movies);
+          setTotalResults(total);
+          setCurrentPage(page);
+          setLoading(false);
+          setErr("");
+        }
+      }
+    };
     searchRatedMovies();
-  }, []);
+  }, [tab, guestSessionId]);
 
   const hasData = !(loading || loadingGenres || err || !totalResults);
 
@@ -74,6 +82,7 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres }) => {
 RatedMoviesView.propTypes = {
   guestSessionId: PropTypes.string.isRequired,
   loadingGenres: PropTypes.bool.isRequired,
+  tab: PropTypes.number.isRequired,
 };
 
 export default RatedMoviesView;
