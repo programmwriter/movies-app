@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Tabs } from "antd";
 import MovieService from "../../services/movieService";
-import MoviesView from "../moviesView";
-import RatedMoviesView from "../ratedMoviesView";
+import MoviesPage from "../moviesPage";
+import RatedMoviesPage from "../ratedMoviesPage";
 import { GenresProvider } from "../genresContext";
 
 import "antd/dist/antd.css";
@@ -71,14 +71,14 @@ export default class App extends Component {
           <GenresProvider value={genres}>
             <Tabs defaultActiveKey="1" onChange={this.onChangeTab}>
               <TabPane tab="Searh" key="1">
-                <MoviesView
+                <MoviesPage
                   guestSessionId={guestSessionId}
                   loadingGenres={loadingGenres}
                   setIsRated={this.setIsRated}
                 />
               </TabPane>
               <TabPane tab="Rated" key="2">
-                <RatedMoviesView
+                <RatedMoviesPage
                   guestSessionId={guestSessionId}
                   loadingGenres={loadingGenres}
                   tab={tab}

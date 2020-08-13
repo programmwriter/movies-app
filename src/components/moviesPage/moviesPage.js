@@ -10,34 +10,46 @@ import MovieService from "../../services/movieService";
 const moviesServ = new MovieService();
 
 const MoviesView = ({ guestSessionId, loadingGenres, setIsRated }) => {
-  const [moviesList, setMoviesList] = useState([]);
-  const [totalResults, setTotalResults] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [movieData, setData] = useState(() => {
+    const initState = {
+      moviesList: [],
+      totalResults: 0,
+      currentPage: 1,
+    };
+    return initState;
+  });
   const [keyword, setKeyword] = useState(1);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
   const searchMovies = async (queryWord, pageNumber = 1) => {
-    const getMoviesResponse = await moviesServ.getMoviesByKeyword(
-      queryWord,
-      pageNumber
-    );
+    try {
+      const {
+        results: movies,
+        total_results: total,
+        page,
+      } = await moviesServ.getMoviesByKeyword(queryWord, pageNumber);
 
-    if (getMoviesResponse === "Failed to fetch") {
-      setErr("Sorry, you have problem with network");
-      setLoading(false);
-    } else {
-      const { results: movies, total_results: total, page } = getMoviesResponse;
       if (!total) {
         setErr("Sorry, no results were found for your search.");
         setLoading(false);
-      } else {
-        setMoviesList(movies);
-        setTotalResults(total);
-        setCurrentPage(page);
-        setLoading(false);
-        setErr("");
+        return;
       }
+
+      setData({
+        moviesList: movies,
+        totalResults: total,
+        currentPage: page,
+      });
+      setLoading(false);
+      setErr("");
+    } catch ({ message }) {
+      if (message === "Failed to fetch") {
+        setErr("Sorry, you have problem with network");
+      } else {
+        setErr(message);
+      }
+      setLoading(false);
     }
   };
 
@@ -48,7 +60,6 @@ const MoviesView = ({ guestSessionId, loadingGenres, setIsRated }) => {
   const onChangeKeyword = (newKeyword) => {
     searchMovies(newKeyword);
     setKeyword(newKeyword);
-    setCurrentPage(1);
     setErr(false);
   };
 
@@ -65,9 +76,10 @@ const MoviesView = ({ guestSessionId, loadingGenres, setIsRated }) => {
     searchMovies(keyword, page);
   };
 
-  const hasData = !(loading || loadingGenres || err || !totalResults);
+  const hasData = !(loading || loadingGenres || err || !movieData.totalResults);
 
-  const hasError = (!totalResults || err) && !loading && !loadingGenres;
+  const hasError =
+    (!movieData.totalResults || err) && !loading && !loadingGenres;
 
   const errorView = hasError ? <ErrorView err={err} /> : null;
 
@@ -77,16 +89,15 @@ const MoviesView = ({ guestSessionId, loadingGenres, setIsRated }) => {
 
   const contentView = hasData ? (
     <>
-      <Search onChangeKeyword={onChangeKeyword} />
       <div className="movies">
-        <MoviesList moviesList={moviesList} rateMovie={rateMovie} />
+        <MoviesList moviesList={movieData.moviesList} rateMovie={rateMovie} />
       </div>
       <div className="pagination">
         <Pagination
-          current={currentPage}
+          current={movieData.currentPage}
           onChange={onChangePage}
           size="small"
-          total={totalResults}
+          total={movieData.totalResults}
           defaultPageSize={20}
           showSizeChanger={false}
         />
@@ -96,6 +107,7 @@ const MoviesView = ({ guestSessionId, loadingGenres, setIsRated }) => {
 
   return (
     <>
+      <Search onChangeKeyword={onChangeKeyword} />
       {errorView}
       {spinnerView}
       {contentView}

@@ -3,57 +3,60 @@ import PropTypes from "prop-types";
 import { Pagination, Spin } from "antd";
 import MoviesList from "../moviesList";
 import ErrorView from "../errorView";
-import "./_ratedMoviesView.scss";
+import "./_ratedMoviesPage.scss";
 import MovieService from "../../services/movieService";
 
 const moviesServ = new MovieService();
 
-const RatedMoviesView = ({ guestSessionId, loadingGenres, tab, isRated }) => {
-  const [moviesList, setMoviesList] = useState([]);
-  const [totalResults, setTotalResults] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+const RatedMoviesPage = ({ guestSessionId, loadingGenres, tab, isRated }) => {
+  const [movieData, setData] = useState(() => {
+    const initState = {
+      moviesList: [],
+      totalResults: 0,
+      currentPage: 1,
+    };
+    return initState;
+  });
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const searchRatedMovies = async (rated) => {
-      let getMoviesResponse;
-
-      if (rated) {
-        getMoviesResponse = await moviesServ.getRatedMovies(guestSessionId);
-
-        if (getMoviesResponse === "Failed to fetch") {
-          setErr("Sorry, you have problem with network");
-          setLoading(false);
-        }
-
+      if (!rated) {
+        setErr("You should rate movie first.");
+        setLoading(false);
+        return;
+      }
+      try {
         const {
           results: movies,
           total_results: total,
           page,
-        } = getMoviesResponse;
+        } = await moviesServ.getRatedMovies(guestSessionId);
 
-        if (!total) {
-          setErr("You should rate movie first.");
-          setLoading(false);
+        setData({
+          moviesList: movies,
+          totalResults: total,
+          currentPage: page,
+        });
+        setLoading(false);
+        setErr("");
+      } catch ({ message }) {
+        if (message === "Failed to fetch") {
+          setErr("Sorry, you have problem with network");
         } else {
-          setMoviesList(movies);
-          setTotalResults(total);
-          setCurrentPage(page);
-          setLoading(false);
-          setErr("");
+          setErr(message);
         }
-      } else {
-        setErr("You should rate movie first.");
         setLoading(false);
       }
     };
     searchRatedMovies(isRated);
   }, [tab, guestSessionId, isRated]);
 
-  const hasData = !(loading || loadingGenres || err || !totalResults);
+  const hasData = !(loading || loadingGenres || err || !movieData.totalResults);
 
-  const hasError = (!totalResults || err) && !loading && !loadingGenres;
+  const hasError =
+    (!movieData.totalResults || err) && !loading && !loadingGenres;
 
   const isLoading = loading;
 
@@ -66,13 +69,13 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres, tab, isRated }) => {
   const contentView = hasData ? (
     <>
       <div className="movies">
-        <MoviesList moviesList={moviesList} />
+        <MoviesList moviesList={movieData.moviesList} />
       </div>
       <div className="pagination">
         <Pagination
-          current={currentPage}
+          current={movieData.currentPage}
           size="small"
-          total={totalResults}
+          total={movieData.totalResults}
           defaultPageSize={20}
           showSizeChanger={false}
         />
@@ -89,11 +92,11 @@ const RatedMoviesView = ({ guestSessionId, loadingGenres, tab, isRated }) => {
   );
 };
 
-RatedMoviesView.propTypes = {
+RatedMoviesPage.propTypes = {
   guestSessionId: PropTypes.string.isRequired,
   loadingGenres: PropTypes.bool.isRequired,
   isRated: PropTypes.bool.isRequired,
   tab: PropTypes.number.isRequired,
 };
 
-export default RatedMoviesView;
+export default RatedMoviesPage;
